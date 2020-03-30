@@ -1,0 +1,29 @@
+{
+    "name": "monstar-lab-oss/n-meta-php",
+    "description": "PHP package for parsing Meta header",
+    "keywords": [
+        "n-meta",
+        "php"
+    ],
+    "license": "MIT",
+    "homepage": "http://monstar-lab.com",
+    "authors": [
+        {
+            "name": "Casper Rasmussen",
+            "email": "cr@nodes.dk",
+            "role": "CTO & Partner"
+        }
+    ],
+    "require": {
+        "php": "^7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "NMeta\\": "src/",
+            "NMeta\\Tests\\": "tests/"
+        }
+    }
+}
