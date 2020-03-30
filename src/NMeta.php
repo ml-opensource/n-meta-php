@@ -83,7 +83,7 @@ class NMeta
     public function __construct(?string $header = null, Config $config = null)
     {
         if (empty($header)) {
-            throw new BadRequestException($config->getHeader() . ' header: header is missing');
+            throw new BadRequestException($config->getHeader() . ' header is missing');
         }
 
         if (!$config) {
@@ -127,9 +127,9 @@ class NMeta
 
         $this->version = $headerArr[2];
         $versionArr = explode('.', $this->version);
-        $this->majorVersion = isset($versionArr[0]) ? $versionArr[0] : 0;
-        $this->minorVersion = isset($versionArr[1]) ? $versionArr[1] : 0;
-        $this->patchVersion = isset($versionArr[2]) ? $versionArr[2] : 0;
+        $this->majorVersion = $versionArr[0] ?? 0;
+        $this->minorVersion = $versionArr[1] ?? 0;
+        $this->patchVersion = $versionArr[2] ?? 0;
 
         // Parse device os version
         if (!isset($headerArr[3])) {
