@@ -1,13 +1,17 @@
 # N-Meta PHP sdk
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nstack-io/laravel-sdk/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/nstack-io/laravel-sdk/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/nstack-io/laravel-sdk/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/nstack-io/laravel-sdk/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/nstack-io/laravel-sdk/badges/build.png?b=master)](https://scrutinizer-ci.com/g/nstack-io/laravel-sdk/build-status/master)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/nstack-io/laravel-sdk/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/monstar-lab-oss/n-meta-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/monstar-lab-oss/n-meta-php/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/monstar-lab-oss/n-meta-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/monstar-lab-oss/n-meta-php/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/monstar-lab-oss/n-meta-php/badges/build.png?b=master)](https://scrutinizer-ci.com/g/monstar-lab-oss/n-meta-php/build-status/master)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/monstar-lab-oss/n-meta-php/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 
 ## 📝 Introduction
 
-Core of N-Meta, parsing and DTO
+Core of N-Meta, parsing and DTO.
+
+Used to parse the N-Meta headers using following format:
+
+`Meta: [PLATFORM];[ENVIRONMENT];[APP_VERSION];[DEVICE_OS];[DEVICE]`
 
 ## 📦 Installation
 
@@ -27,7 +31,6 @@ or setup in composer.json
 ## ⚙ Usage
 
 ```php
-
 $header = 'ios;production;1.0.0;10.2;iphone-x';
 $meta = new NMeta($header);
 
