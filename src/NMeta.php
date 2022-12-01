@@ -13,71 +13,71 @@ class NMeta
     /**
      * @var string
      */
-    protected $platform;
+    protected string $platform;
 
     /**
      * @var string
      */
-    protected $environment;
+    protected string $environment;
 
     /**
      * Version number.
      *
      * @var string
      */
-    protected $version = 1;
+    protected string $version = "1";
 
     /**
      * Major version number.
      *
      * @var int
      */
-    protected $majorVersion = 0;
+    protected int $majorVersion = 0;
 
     /**
      * Minor version number.
      *
      * @var int
      */
-    protected $minorVersion = 0;
+    protected int $minorVersion = 0;
 
     /**
      * Patch version number.
      *
      * @var int
      */
-    protected $patchVersion = 0;
+    protected int $patchVersion = 0;
 
     /**
      * @var string|null
      */
-    protected $deviceOsVersion;
+    protected ?string $deviceOsVersion;
 
     /**
      * @var string
      */
-    protected $device;
+    protected string $device;
 
     /**
      * platforms.
      *
      * @var array
      */
-    protected $platforms;
+    protected array $platforms;
 
     /**
      * environments.
      *
      * @var array
      */
-    protected $environments;
+    protected array $environments;
 
     /**
      * NMeta constructor.
      *
      * @param string|null        $header
-     * @param \NMeta\Config|null $config
-     * @throws \NMeta\BadRequestException
+     * @param Config|null $config
+     * @throws BadRequestException
      * @author Casper Rasmussen <cr@nodes.dk>
      */
     public function __construct(?string $header = null, Config $config = null)
@@ -99,18 +99,28 @@ class NMeta
 
         // Parse platform
         if (!isset($headerArr[0]) || !in_array($headerArr[0], $this->platforms)) {
-            throw new BadRequestException($config->getHeader() . ' header: Platform is not supported, should be: ' .
-                                          implode(',', $this->platforms) .
-                                          ' -  format:' . $format);
+            $message = sprintf(
+                '%s header: Platform is not supported, should be: %s - format: %s',
+                $config->getHeader(),
+                implode(',', $this->platforms),
+                $format
+            );
+
+            throw new BadRequestException($message);
         }
 
         $this->platform = $headerArr[0];
 
         // Parse env
         if (!isset($headerArr[1]) || !in_array($headerArr[1], $this->environments)) {
-            throw new BadRequestException($config->getHeader() . ' header: Environment is not supported, should be: ' .
-                                          implode(',', $this->environments) .
-                                          ' -  format:' . $format);
+            $message = sprintf(
+                '%s header: Environment is not supported, should be: %s - format: %s',
+                $config->getHeader(),
+                implode(',', $this->environments),
+                $format
+            );
+
+            throw new BadRequestException($message);
         }
 
         $this->environment = $headerArr[1];
@@ -122,7 +132,12 @@ class NMeta
 
         // Parse Build number
         if (!isset($headerArr[2])) {
-            throw new BadRequestException('Meta header: Missing version' . ' -  format:' . $format);
+            $message = sprintf(
+                'Meta header: Missing version - format: %s',
+                $format
+            );
+
+            throw new BadRequestException($message);
         }
 
         $this->version = $headerArr[2];
@@ -133,15 +148,24 @@ class NMeta
 
         // Parse device os version
         if (!isset($headerArr[3])) {
-            throw new BadRequestException('Meta header: Missing device os version' .
-                                          ' -  format:' . $format);
+            $message = sprintf(
+                'Meta header: Missing device os version - format: %s',
+                $format
+            );
+
+            throw new BadRequestException($message);
         }
 
         $this->deviceOsVersion = $headerArr[3];
 
         // Parse device
         if (!isset($headerArr[4])) {
-            throw new BadRequestException('Meta header: Missing device' . ' -  format:' . $format);
+            $message = sprintf(
+                'Meta header: Missing device - format: %s',
+                $format
+            );
+
+            throw new BadRequestException($message);
         }
 
         $this->device = $headerArr[4];
@@ -153,7 +177,7 @@ class NMeta
      * @return string
      * @author Casper Rasmussen <cr@nodes.dk>
      */
-    public function getPlatform()
+    public function getPlatform(): string
     {
         return $this->platform;
     }
@@ -164,7 +188,7 @@ class NMeta
      * @return string
      * @author Casper Rasmussen <cr@nodes.dk>
      */
-    public function getEnvironment()
+    public function getEnvironment(): string
     {
         return $this->environment;
     }
@@ -175,7 +199,7 @@ class NMeta
      * @return string
      * @author Casper Rasmussen <cr@nodes.dk>
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->version;
     }
@@ -186,7 +210,7 @@ class NMeta
      * @return int
      * @author Casper Rasmussen <cr@nodes.dk>
      */
-    public function getMajorVersion()
+    public function getMajorVersion(): int
     {
         return $this->majorVersion;
     }
@@ -197,7 +221,7 @@ class NMeta
      * @return int
      * @author Casper Rasmussen <cr@nodes.dk>
      */
-    public function getMinorVersion()
+    public function getMinorVersion(): int
     {
         return $this->minorVersion;
     }
@@ -208,7 +232,7 @@ class NMeta
      * @return int
      * @author Casper Rasmussen <cr@nodes.dk>
      */
-    public function getPatchVersion()
+    public function getPatchVersion(): int
     {
         return $this->patchVersion;
     }
@@ -219,7 +243,7 @@ class NMeta
      * @return null|string
      * @author Casper Rasmussen <cr@nodes.dk>
      */
-    public function getDeviceOsVersion()
+    public function getDeviceOsVersion(): ?string
     {
         return $this->deviceOsVersion;
     }
@@ -230,7 +254,7 @@ class NMeta
      * @return string
      * @author Casper Rasmussen <cr@nodes.dk>
      */
-    public function getDevice()
+    public function getDevice(): string
     {
         return $this->device;
     }
@@ -241,7 +265,7 @@ class NMeta
      * @return array
      * @author Casper Rasmussen <cr@nodes.dk>
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'platform'        => $this->platform,
@@ -267,11 +291,18 @@ class NMeta
     {
         switch ($this->platform) {
             case 'web':
-                return sprintf('%s;%s;', $this->platform, $this->environment);
+                return sprintf(
+                    '%s;%s;',
+                    $this->platform,
+                    $this->environment
+                );
             default:
-                return sprintf('%s;%s;%s;%s;%s', $this->platform,
+                return sprintf(
+                    '%s;%s;%s;%s;%s',
+                    $this->platform,
                     $this->environment, $this->version,
-                    $this->deviceOsVersion, $this->device);
+                    $this->deviceOsVersion, $this->device
+                );
         }
     }
 }
