@@ -23,40 +23,40 @@ class NMeta
     /**
      * Version number.
      *
-     * @var string
+     * @var string|null
      */
-    protected string $version;
+    protected ?string $version = null;
 
     /**
      * Major version number.
      *
-     * @var int
+     * @var int|null
      */
     protected int $majorVersion = 0;
 
     /**
      * Minor version number.
      *
-     * @var int
+     * @var int|null
      */
     protected int $minorVersion = 0;
 
     /**
      * Patch version number.
      *
-     * @var int
+     * @var int|null
      */
     protected int $patchVersion = 0;
 
     /**
      * @var string|null
      */
-    protected ?string $deviceOsVersion;
+    protected ?string $deviceOsVersion = null;
 
     /**
-     * @var string
+     * @var string|null
      */
-    protected string $device;
+    protected ?string $device = null;
 
     /**
      * platforms.
@@ -127,6 +127,12 @@ class NMeta
 
         // Web does not have further requirements, since they have a normal User-Agent header
         if ($this->platform == 'web') {
+            $this->version = sprintf(
+                '%d.%d.%d',
+                $this->majorVersion,
+                $this->minorVersion,
+                $this->patchVersion
+            );
             return;
         }
 
@@ -240,7 +246,7 @@ class NMeta
     /**
      * Retrieve deviceOsVersion.
      *
-     * @return null|string
+     * @return string|null
      * @author Casper Rasmussen <cr@nodes.dk>
      */
     public function getDeviceOsVersion(): ?string
@@ -251,10 +257,10 @@ class NMeta
     /**
      * Retrieve device.
      *
-     * @return string
+     * @return string|null
      * @author Casper Rasmussen <cr@nodes.dk>
      */
-    public function getDevice(): string
+    public function getDevice(): ?string
     {
         return $this->device;
     }
