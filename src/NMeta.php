@@ -25,7 +25,7 @@ class NMeta
      *
      * @var string
      */
-    protected string $version = "1";
+    protected string $version;
 
     /**
      * Major version number.
