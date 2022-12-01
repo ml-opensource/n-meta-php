@@ -23,28 +23,28 @@ class NMeta
     /**
      * Version number.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $version = null;
+    protected string $version;
 
     /**
      * Major version number.
      *
-     * @var int|null
+     * @var int
      */
     protected int $majorVersion = 0;
 
     /**
      * Minor version number.
      *
-     * @var int|null
+     * @var int
      */
     protected int $minorVersion = 0;
 
     /**
      * Patch version number.
      *
-     * @var int|null
+     * @var int
      */
     protected int $patchVersion = 0;
 
@@ -306,8 +306,10 @@ class NMeta
                 return sprintf(
                     '%s;%s;%s;%s;%s',
                     $this->platform,
-                    $this->environment, $this->version,
-                    $this->deviceOsVersion, $this->device
+                    $this->environment,
+                    $this->version,
+                    $this->deviceOsVersion,
+                    $this->device
                 );
         }
     }
