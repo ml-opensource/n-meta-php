@@ -11,13 +11,13 @@ namespace NMeta;
 class Config
 {
     /** @var string */
-    protected $header;
+    protected string $header;
 
     /** @var array */
-    protected $platforms;
+    protected array $platforms;
 
     /** @var array */
-    protected $environments;
+    protected array $environments;
 
     public function __construct(array $data)
     {
@@ -71,7 +71,7 @@ class Config
     /**
      * createDefault
      *
-     * @return \NMeta\Config
+     * @return Config
      * @author Casper Rasmussen <cr@nodes.dk>
      */
     public static function createDefault(): self

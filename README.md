@@ -17,7 +17,7 @@ Used to parse the N-Meta headers using following format:
 
 To install this package you will need:
 
-* PHP 7.1+
+* PHP 8.0+
 
 Run
 
@@ -25,7 +25,7 @@ Run
 
 or setup in composer.json
 
-`monstar-lab/n-meta: 1.0.x`
+`monstar-lab/n-meta: 2.0.x`
 
 
 ## ⚙ Usage
