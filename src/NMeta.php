@@ -148,8 +148,26 @@ class NMeta
 
         $this->version = $headerArr[2];
         $versionArr = explode('.', $this->version);
+
+        if (!is_numeric($versionArr[0])) {
+            $message = 'Meta header: Invalid Major version, expected integer';
+            throw new BadRequestException($message);
+        }
+
         $this->majorVersion = $versionArr[0] ?? 0;
+
+        if (!is_numeric($versionArr[1])) {
+            $message = 'Meta header: Invalid Minor version, expected integer';
+            throw new BadRequestException($message);
+        }
+
         $this->minorVersion = $versionArr[1] ?? 0;
+
+        if (!is_numeric($versionArr[2])) {
+            $message = 'Meta header: Invalid Patch version, expected integer';
+            throw new BadRequestException($message);
+        }
+
         $this->patchVersion = $versionArr[2] ?? 0;
 
         // Parse device os version
