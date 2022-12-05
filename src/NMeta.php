@@ -111,85 +111,24 @@ class NMeta
 
         $headerArr = explode(';', $header);
 
-        // Parse platform
-        $this->parsePlatform($headerArr[0]);
-
-        // Parse env
-        $this->parseEnvironment($headerArr[1]);
+        $this->parsePlatform($headerArr[0] ?? null);
+        $this->parseEnvironment($headerArr[1] ?? null);
 
         // Web does not have further requirements, since they have a normal User-Agent header
         if ($this->platform == 'web') {
             $this->version = sprintf(
                 '%d.%d.%d',
-                $this->majorVersion,
-                $this->minorVersion,
-                $this->patchVersion
+                $this->getMajorVersion(),
+                $this->getMinorVersion(),
+                $this->getPatchVersion()
             );
+
             return;
         }
 
-        // Parse Build number
-        if (!isset($headerArr[2])) {
-            $message = sprintf(
-                'Meta header: Missing version - format: %s',
-                $this->format
-            );
-
-            throw new BadRequestException($message);
-        }
-
-        $this->version = $headerArr[2];
-        $versionArr = explode('.', $this->version);
-
-        if (count($versionArr) != 3) {
-            $message = 'Meta header: Invalid app version, invalid amount of segments. Expected semver [x.y.z]';
-            throw new BadRequestException($message);
-        }
-
-        if (!is_numeric($versionArr[0])) {
-            $message = 'Meta header: Invalid Major version, expected integer';
-            throw new BadRequestException($message);
-        }
-
-        $this->majorVersion = $versionArr[0] ?? 0;
-
-        if (!is_numeric($versionArr[1])) {
-            $message = 'Meta header: Invalid Minor version, expected integer';
-            throw new BadRequestException($message);
-        }
-
-        $this->minorVersion = $versionArr[1] ?? 0;
-
-        if (!is_numeric($versionArr[2])) {
-            $message = 'Meta header: Invalid Patch version, expected integer';
-            throw new BadRequestException($message);
-        }
-
-        $this->patchVersion = $versionArr[2] ?? 0;
-
-        // Parse device os version
-        if (!isset($headerArr[3])) {
-            $message = sprintf(
-                'Meta header: Missing device os version - format: %s',
-                $this->format
-            );
-
-            throw new BadRequestException($message);
-        }
-
-        $this->deviceOsVersion = $headerArr[3];
-
-        // Parse device
-        if (!isset($headerArr[4])) {
-            $message = sprintf(
-                'Meta header: Missing device - format: %s',
-                $this->format
-            );
-
-            throw new BadRequestException($message);
-        }
-
-        $this->device = $headerArr[4];
+        $this->parseBuildVersion($headerArr[2] ?? null);
+        $this->parseDeviceOsVersion($headerArr[3] ?? null);
+        $this->parseDevice($headerArr[4] ?? null);
     }
 
     /**
@@ -371,5 +310,111 @@ class NMeta
         }
 
         $this->environment = $environment;
+    }
+
+    /**
+     * parseBuildVersion
+     *
+     * @param string|null $version
+     * @throws BadRequestException
+     */
+    private function parseBuildVersion(?string $version): void
+    {
+        if (!isset($version)) {
+            $message = sprintf(
+                '%s header: Missing version - format: %s',
+                $this->config->getHeader(),
+                $this->format
+            );
+
+            throw new BadRequestException($message);
+        }
+
+        $this->version = $version;
+        $versionArr = explode('.', $this->version);
+
+        if (count($versionArr) != 3) {
+            $message = sprintf(
+                '%s header: Invalid app version, invalid amount of segments. Expected semver [x.y.z]',
+                $this->config->getHeader()
+            );
+
+            throw new BadRequestException($message);
+        }
+
+        if (!is_numeric($versionArr[0])) {
+            $message = sprintf(
+                '%s header: Invalid Major version, expected integer',
+                $this->config->getHeader()
+            );
+
+            throw new BadRequestException($message);
+        }
+
+        $this->majorVersion = $versionArr[0] ?? 0;
+
+        if (!is_numeric($versionArr[1])) {
+            $message = sprintf(
+                '%s header: Invalid Minor version, expected integer',
+                $this->config->getHeader()
+            );
+
+            throw new BadRequestException($message);
+        }
+
+        $this->minorVersion = $versionArr[1] ?? 0;
+
+        if (!is_numeric($versionArr[2])) {
+            $message = sprintf(
+                '%s header: Invalid Patch version, expected integer',
+                $this->config->getHeader()
+            );
+
+            throw new BadRequestException($message);
+        }
+
+        $this->patchVersion = $versionArr[2] ?? 0;
+    }
+
+    /**
+     * parseDeviceOsVersion
+     *
+     * @param string|null $version
+     * @throws BadRequestException
+     */
+    private function parseDeviceOsVersion(?string $version): void
+    {
+        if (!isset($version)) {
+            $message = sprintf(
+                '%s header: Missing device os version - format: %s',
+                $this->config->getHeader(),
+                $this->format
+            );
+
+            throw new BadRequestException($message);
+        }
+
+        $this->deviceOsVersion = $version;
+    }
+
+    /**
+     * parseDevice
+     *
+     * @param string|null $device
+     * @throws BadRequestException
+     */
+    private function parseDevice(?string $device): void
+    {
+        if (!isset($device)) {
+            $message = sprintf(
+                '%s header: Missing device - format: %s',
+                $this->config->getHeader(),
+                $this->format
+            );
+
+            throw new BadRequestException($message);
+        }
+
+        $this->device = $device;
     }
 }

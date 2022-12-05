@@ -31,19 +31,20 @@ class NMetaTest extends TestCase
     public function testFailureInvalidPlatform()
     {
         $this->expectException(BadRequestException::class);
-        $meta = new NMeta('invalid_platform;production;1.0.0;10.2;iphone-x');
+
+        try {
+            $meta = new NMeta('invalid_platform;production;1.0.0;10.2;iphone-x');
+        } catch (BadRequestException $e) {
+            $expected = 'Client-Meta-Information header: Platform is not supported, should be: android,ios,web - format: platform;environment;version;os-version;device';
+            $this->assertEquals($expected, $e->getMessage());
+            throw $e;
+        }
     }
 
     public function testFailureInvalidEnvironment()
     {
         $this->expectException(BadRequestException::class);
         $meta = new NMeta('ios;invalid_environment;1.0.0;10.2;iphone-x');
-    }
-
-    public function testFailureMissingVersion()
-    {
-        $this->expectException(BadRequestException::class);
-        $meta = new NMeta('ios;production');
     }
 
     public function testSuccessWebPlatform()
@@ -67,6 +68,12 @@ class NMetaTest extends TestCase
         ], $meta->toArray());
     }
 
+    public function testFailureMissingBuildVersion()
+    {
+        $this->expectException(BadRequestException::class);
+        $meta = new NMeta('ios;production');
+    }
+
     public function testFailureIMissingOSVersion()
     {
         $this->expectException(BadRequestException::class);
@@ -86,7 +93,8 @@ class NMetaTest extends TestCase
         try {
             $meta = new NMeta('android;staging;1-staging.0.0;Android 12;SM-G975F');
         } catch (BadRequestException $e) {
-            $this->assertEquals('Meta header: Invalid Major version, expected integer', $e->getMessage());
+            $expected = 'Client-Meta-Information header: Invalid Major version, expected integer';
+            $this->assertEquals($expected, $e->getMessage());
             throw $e;
         }
     }
@@ -98,7 +106,8 @@ class NMetaTest extends TestCase
         try {
             $meta = new NMeta('android;staging;1.0-staging.0;Android 12;SM-G975F');
         } catch (BadRequestException $e) {
-            $this->assertEquals('Meta header: Invalid Minor version, expected integer', $e->getMessage());
+            $expected = 'Client-Meta-Information header: Invalid Minor version, expected integer';
+            $this->assertEquals($expected, $e->getMessage());
             throw $e;
         }
     }
@@ -110,7 +119,8 @@ class NMetaTest extends TestCase
         try {
             $meta = new NMeta('android;staging;1.0.0-staging;Android 12;SM-G975F');
         } catch (BadRequestException $e) {
-            $this->assertEquals('Meta header: Invalid Patch version, expected integer', $e->getMessage());
+            $expected = 'Client-Meta-Information header: Invalid Patch version, expected integer';
+            $this->assertEquals($expected, $e->getMessage());
             throw $e;
         }
     }
@@ -122,7 +132,7 @@ class NMetaTest extends TestCase
         try {
             $meta = new NMeta('android;staging;1.0;Android 12;SM-G975F');
         } catch (BadRequestException $e) {
-            $expected = 'Meta header: Invalid app version, invalid amount of segments. Expected semver [x.y.z]';
+            $expected = 'Client-Meta-Information header: Invalid app version, invalid amount of segments. Expected semver [x.y.z]';
             $this->assertEquals($expected, $e->getMessage());
             throw $e;
         }
