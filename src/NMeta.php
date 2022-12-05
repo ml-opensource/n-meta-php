@@ -73,6 +73,20 @@ class NMeta
     protected array $environments;
 
     /**
+     * Configuration object
+     *
+     * @var Config
+     */
+    protected Config $config;
+
+    /**
+     * Header format reference
+     *
+     * @var string
+     */
+    protected string $format = 'platform;environment;version;os-version;device'; // ios;local;1.0.0;10.1;iphone-x
+
+    /**
      * NMeta constructor.
      *
      * @param string|null        $header
@@ -82,48 +96,26 @@ class NMeta
      */
     public function __construct(?string $header = null, Config $config = null)
     {
-        if (empty($header)) {
-            throw new BadRequestException($config->getHeader() . ' header is missing');
-        }
-
         if (!$config) {
-            $config = Config::createDefault();
+            $this->config = Config::createDefault();
+        } else {
+            $this->config = $config;
         }
 
-        $this->platforms = $config->getPlatforms();
-        $this->environments = $config->getEnvironments();
+        if (empty($header)) {
+            throw new BadRequestException($this->config->getHeader() . ' header is missing');
+        }
 
-        $format = 'platform;environment;version;os-version;device'; // ios;local;1.0.0;10.1;iphone-x
+        $this->platforms = $this->config->getPlatforms();
+        $this->environments = $this->config->getEnvironments();
 
         $headerArr = explode(';', $header);
 
         // Parse platform
-        if (!isset($headerArr[0]) || !in_array($headerArr[0], $this->platforms)) {
-            $message = sprintf(
-                '%s header: Platform is not supported, should be: %s - format: %s',
-                $config->getHeader(),
-                implode(',', $this->platforms),
-                $format
-            );
-
-            throw new BadRequestException($message);
-        }
-
-        $this->platform = $headerArr[0];
+        $this->parsePlatform($headerArr[0]);
 
         // Parse env
-        if (!isset($headerArr[1]) || !in_array($headerArr[1], $this->environments)) {
-            $message = sprintf(
-                '%s header: Environment is not supported, should be: %s - format: %s',
-                $config->getHeader(),
-                implode(',', $this->environments),
-                $format
-            );
-
-            throw new BadRequestException($message);
-        }
-
-        $this->environment = $headerArr[1];
+        $this->parseEnvironment($headerArr[1]);
 
         // Web does not have further requirements, since they have a normal User-Agent header
         if ($this->platform == 'web') {
@@ -140,7 +132,7 @@ class NMeta
         if (!isset($headerArr[2])) {
             $message = sprintf(
                 'Meta header: Missing version - format: %s',
-                $format
+                $this->format
             );
 
             throw new BadRequestException($message);
@@ -156,7 +148,7 @@ class NMeta
         if (!isset($headerArr[3])) {
             $message = sprintf(
                 'Meta header: Missing device os version - format: %s',
-                $format
+                $this->format
             );
 
             throw new BadRequestException($message);
@@ -168,7 +160,7 @@ class NMeta
         if (!isset($headerArr[4])) {
             $message = sprintf(
                 'Meta header: Missing device - format: %s',
-                $format
+                $this->format
             );
 
             throw new BadRequestException($message);
@@ -312,5 +304,49 @@ class NMeta
                     $this->device
                 );
         }
+    }
+
+    /**
+     * parsePlatform
+     *
+     * @param string|null $platform
+     * @throws BadRequestException
+     */
+    private function parsePlatform(?string $platform): void
+    {
+        if (!isset($platform) || !in_array($platform, $this->platforms)) {
+            $message = sprintf(
+                '%s header: Platform is not supported, should be: %s - format: %s',
+                $this->config->getHeader(),
+                implode(',', $this->platforms),
+                $this->format
+            );
+
+            throw new BadRequestException($message);
+        }
+
+        $this->platform = $platform;
+    }
+
+    /**
+     * parseEnvironment
+     *
+     * @param string|null $environment
+     * @throws BadRequestException
+     */
+    private function parseEnvironment(?string $environment): void
+    {
+        if (!isset($environment) || !in_array($environment, $this->environments)) {
+            $message = sprintf(
+                '%s header: Environment is not supported, should be: %s - format: %s',
+                $this->config->getHeader(),
+                implode(',', $this->environments),
+                $this->format
+            );
+
+            throw new BadRequestException($message);
+        }
+
+        $this->environment = $environment;
     }
 }
