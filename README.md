@@ -13,8 +13,6 @@ Used to parse the N-Meta headers using following format:
 
 `Meta: [PLATFORM];[ENVIRONMENT];[APP_VERSION];[DEVICE_OS];[DEVICE]`
 
-<<<<<<< Updated upstream
-=======
 #### PLATFORM:
 Description of the requesting platform, expects values `android`, `ios` or `web`
 
@@ -27,11 +25,9 @@ Semantic version sting of the requesting client `x.y.z`. Not required if platfor
 #### DEVICE_OS:
 Version of the operating system the request was made from, eg. `10.2`. Not required if platform is web.
 
-
 #### DEVICE:
 Description of the device making the request, eg. `iphone-x`. Not required if platform is web.
 
->>>>>>> Stashed changes
 ## 📦 Installation
 
 To use this package you will need:
