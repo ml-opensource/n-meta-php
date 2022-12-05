@@ -78,4 +78,53 @@ class NMetaTest extends TestCase
         $this->expectException(BadRequestException::class);
         $meta = new NMeta('ios;production;1.0.0;10.2');
     }
+
+    public function testFailureInvalidAppMajorVersion()
+    {
+        $this->expectException(BadRequestException::class);
+
+        try {
+            $meta = new NMeta('android;staging;1-staging.0.0;Android 12;SM-G975F');
+        } catch (BadRequestException $e) {
+            $this->assertEquals('Meta header: Invalid Major version, expected integer', $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function testFailureInvalidAppMinorVersion()
+    {
+        $this->expectException(BadRequestException::class);
+
+        try {
+            $meta = new NMeta('android;staging;1.0-staging.0;Android 12;SM-G975F');
+        } catch (BadRequestException $e) {
+            $this->assertEquals('Meta header: Invalid Minor version, expected integer', $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function testFailureInvalidAppPatchVersion()
+    {
+        $this->expectException(BadRequestException::class);
+
+        try {
+            $meta = new NMeta('android;staging;1.0.0-staging;Android 12;SM-G975F');
+        } catch (BadRequestException $e) {
+            $this->assertEquals('Meta header: Invalid Patch version, expected integer', $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function testFailureInvalidAmountOfVersionSegments()
+    {
+        $this->expectException(BadRequestException::class);
+        
+        try {
+            $meta = new NMeta('android;staging;1.0;Android 12;SM-G975F');
+        } catch (BadRequestException $e) {
+            $expected = 'Meta header: Invalid app version, invalid amount of segments. Expected semver [x.y.z]';
+            $this->assertEquals($expected, $e->getMessage());
+            throw $e;
+        }
+    }
 }
