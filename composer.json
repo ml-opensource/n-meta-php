@@ -6,12 +6,17 @@
         "php"
     ],
     "license": "MIT",
-    "homepage": "http://monstar-lab.com",
+    "homepage": "https://monstar-lab.com",
     "authors": [
         {
             "name": "Casper Rasmussen",
             "email": "cr@nodes.dk",
             "role": "CTO & Partner"
+        },
+        {
+            "name": "Rasmus Ebbesen",
+            "email": "rasmus.ebbesen@monstar-lab.com",
+            "role": ""
         }
     ],
     "require": {

@@ -13,6 +13,21 @@ Used to parse the N-Meta headers using following format:
 
 `Meta: [PLATFORM];[ENVIRONMENT];[APP_VERSION];[DEVICE_OS];[DEVICE]`
 
+#### PLATFORM:
+Description of the requesting platform, expects values `android`, `ios` or `web`
+
+#### ENVIRONMENT:
+Description of the environment the request is targeted at, normally `staging` or `production`
+
+#### APP_VERSION:
+Semantic version sting of the requesting client `x.y.z`
+
+#### DEVICE_OS:
+Version of the operating system the request was made from. Not if platform is web, eg. `10.2` 
+
+#### DEVICE:
+Description of the device making the request, eg. `iphone-x`
+
 ## 📦 Installation
 
 To install this package you will need:
