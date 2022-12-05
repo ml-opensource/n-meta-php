@@ -149,6 +149,11 @@ class NMeta
         $this->version = $headerArr[2];
         $versionArr = explode('.', $this->version);
 
+        if (count($versionArr) != 3) {
+            $message = 'Meta header: Invalid app version, invalid amount of segments. Expected semver [x.y.z]';
+            throw new BadRequestException($message);
+        }
+
         if (!is_numeric($versionArr[0])) {
             $message = 'Meta header: Invalid Major version, expected integer';
             throw new BadRequestException($message);

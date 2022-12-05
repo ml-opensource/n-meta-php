@@ -114,4 +114,17 @@ class NMetaTest extends TestCase
             throw $e;
         }
     }
+
+    public function testFailureInvalidAmountOfVersionSegments()
+    {
+        $this->expectException(BadRequestException::class);
+        
+        try {
+            $meta = new NMeta('android;staging;1.0;Android 12;SM-G975F');
+        } catch (BadRequestException $e) {
+            $expected = 'Meta header: Invalid app version, invalid amount of segments. Expected semver [x.y.z]';
+            $this->assertEquals($expected, $e->getMessage());
+            throw $e;
+        }
+    }
 }
