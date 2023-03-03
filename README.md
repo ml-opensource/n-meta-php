@@ -7,7 +7,7 @@
 
 ## 📝 Introduction
 
-Core of N-Meta, parsing and DTO.
+Core of N-Meta, parsing and DTO, A User-Agent header for android and ios apps.
 
 Used to parse the N-Meta headers using following format:
 
@@ -20,17 +20,17 @@ Description of the requesting platform, expects values `android`, `ios` or `web`
 Description of the environment the request is targeted at, normally `staging` or `production`
 
 #### APP_VERSION:
-Semantic version sting of the requesting client `x.y.z`
+Semantic version sting of the requesting client `x.y.z`. Not required if platform is web.
 
 #### DEVICE_OS:
-Version of the operating system the request was made from. Not if platform is web, eg. `10.2` 
+Version of the operating system the request was made from, eg. `10.2`. Not required if platform is web.
 
 #### DEVICE:
-Description of the device making the request, eg. `iphone-x`
+Description of the device making the request, eg. `iphone-x`. Not required if platform is web.
 
 ## 📦 Installation
 
-To install this package you will need:
+To use this package you will need:
 
 * PHP 8.0+
 
